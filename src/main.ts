@@ -9,25 +9,24 @@ async function bootstrap() {
   const logger = new Logger('Main');
 
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-      AppModule,
-      {
-        transport: Transport.TCP,
-        options: {
-          port: envs.port
-        }
+    AppModule,
+    {
+      transport: Transport.TCP,
+      options: {
+        port: envs.port
       }
+    }
   );
 
   app.useGlobalPipes(
     new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    })
-   );
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
+  await app.listen();
+  logger.log(`Products Microservice running on port ${ envs.port }`);
 
-
-  // await app.listen(envs.port);
-  logger.log(`Products Microservice is running on ${envs.port} port`);
 }
 bootstrap();
